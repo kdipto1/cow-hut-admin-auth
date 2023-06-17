@@ -1,0 +1,17 @@
+{
+  "name": "Missiona-3",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node dist/server.js",
+    "drv": "ts-node-dev --respawn --transpile-only src/server.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "typescript": "^5.1.3"
+  }
+}
