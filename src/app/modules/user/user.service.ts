@@ -28,4 +28,14 @@ const updateUser = async (id: string, payload: Partial<IUser>) => {
   return result;
 };
 
-export const UserService = { createUser, getSingleUser, updateUser };
+const deleteUser = async (id: string) => {
+  const result = await User.findByIdAndDelete(id);
+  return result;
+};
+
+export const UserService = {
+  createUser,
+  getSingleUser,
+  updateUser,
+  deleteUser,
+};
