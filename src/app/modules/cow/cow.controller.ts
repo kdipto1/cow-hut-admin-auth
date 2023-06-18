@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response } from "express";
+import { NextFunction, Request, RequestHandler, Response } from "express";
 import httpStatus from "http-status";
 import { CowService } from "./cow.service";
 
@@ -38,7 +38,24 @@ const getSingleCow = async (
   }
 };
 
+const updateCow: RequestHandler = async (req, res, next) => {
+  try {
+    const id = req.params.id;
+    const data = req.body;
+    const result = await CowService.updateCow(id, data);
+    res.status(httpStatus.OK).json({
+      success: true,
+      statusCode: httpStatus.OK,
+      message: "Cow updated successfully",
+      data: result,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const CowController = {
   createCow,
   getSingleCow,
+  updateCow,
 };

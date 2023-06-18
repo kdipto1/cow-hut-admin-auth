@@ -11,7 +11,15 @@ const getSingleCow = async (id: string) => {
   return result;
 };
 
+const updateCow = async (id: string, payload: Partial<ICOw>) => {
+  const result = await Cow.findByIdAndUpdate(id, payload, {
+    new: true,
+  }).populate("seller");
+  return result;
+};
+
 export const CowService = {
   createCow,
   getSingleCow,
+  updateCow,
 };
