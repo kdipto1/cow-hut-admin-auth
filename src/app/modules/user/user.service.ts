@@ -6,4 +6,9 @@ const createUser = async (payload: IUser): Promise<IUser> => {
   return result;
 };
 
-export const UserService = { createUser };
+const getSingleUser = async (id: string) => {
+  const result = await User.findById(id);
+  return result;
+};
+
+export const UserService = { createUser, getSingleUser };

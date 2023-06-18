@@ -18,8 +18,14 @@ const updateCow = async (id: string, payload: Partial<ICOw>) => {
   return result;
 };
 
+const deleteCow = async (id: string) => {
+  const result = await Cow.findByIdAndDelete(id).populate("seller");
+  return result;
+};
+
 export const CowService = {
   createCow,
   getSingleCow,
   updateCow,
+  deleteCow,
 };
