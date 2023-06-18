@@ -71,9 +71,25 @@ const deleteUser: RequestHandler = async (req, res, next) => {
   }
 };
 
+const getAllUsers: RequestHandler = async (req, res, next) => {
+  try {
+    const result = await UserService.getAllUsers();
+    res.status(httpStatus.OK).json({
+      success: true,
+      statusCode: httpStatus.OK,
+      message: "User retrieved successfully",
+      data: result,
+    });
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
+
 export const UserController = {
   createUser,
   getSingleUser,
   updateUser,
   deleteUser,
+  getAllUsers,
 };
