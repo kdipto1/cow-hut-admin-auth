@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
+import { CowModel, ICOw } from "./cow.interface";
 
-const cowSchema = new mongoose.Schema(
+const cowSchema = new mongoose.Schema<ICOw, CowModel>(
   {
     name: {
       type: String,
