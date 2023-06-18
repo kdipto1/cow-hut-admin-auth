@@ -12,34 +12,17 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.UserController = void 0;
-const user_service_1 = require("./user.service");
+exports.CowController = void 0;
 const http_status_1 = __importDefault(require("http-status"));
-const createUser = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+const cow_service_1 = require("./cow.service");
+const createCow = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const user = req.body;
-        console.log(user);
-        const result = yield user_service_1.UserService.createUser(user);
-        res.status(200).json({
-            success: "true",
-            statusCode: http_status_1.default.OK,
-            message: "User created",
-            data: result,
-        });
-    }
-    catch (error) {
-        console.log(error);
-        next(error);
-    }
-});
-const getSingleUser = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const id = req.params.id;
-        const result = yield user_service_1.UserService.getSingleUser(id);
+        const data = req.body;
+        const result = yield cow_service_1.CowService.createCow(data);
         res.status(http_status_1.default.OK).json({
             success: true,
             statusCode: http_status_1.default.OK,
-            message: "User retrieved successfully",
+            message: "Cow created successfully",
             data: result,
         });
     }
@@ -48,15 +31,31 @@ const getSingleUser = (req, res, next) => __awaiter(void 0, void 0, void 0, func
         next(error);
     }
 });
-const updateUser = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+const getSingleCow = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const id = req.params.id;
+        const result = yield cow_service_1.CowService.getSingleCow(id);
+        res.status(http_status_1.default.OK).json({
+            success: true,
+            statusCode: http_status_1.default.OK,
+            message: "Cow retrieved successfully",
+            data: result,
+        });
+    }
+    catch (error) {
+        console.log(error);
+        next(error);
+    }
+});
+const updateCow = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const id = req.params.id;
         const data = req.body;
-        const result = yield user_service_1.UserService.updateUser(id, data);
+        const result = yield cow_service_1.CowService.updateCow(id, data);
         res.status(http_status_1.default.OK).json({
             success: true,
             statusCode: http_status_1.default.OK,
-            message: "User updated successfully",
+            message: "Cow updated successfully",
             data: result,
         });
     }
@@ -64,14 +63,14 @@ const updateUser = (req, res, next) => __awaiter(void 0, void 0, void 0, functio
         next(error);
     }
 });
-const deleteUser = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+const deleteCow = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const id = req.params.id;
-        const result = yield user_service_1.UserService.deleteUser(id);
+        const result = yield cow_service_1.CowService.deleteCow(id);
         res.status(http_status_1.default.OK).json({
             success: true,
             statusCode: http_status_1.default.OK,
-            message: "User deleted successfully",
+            message: "Cow deleted successfully",
             data: result,
         });
     }
@@ -80,25 +79,9 @@ const deleteUser = (req, res, next) => __awaiter(void 0, void 0, void 0, functio
         next(error);
     }
 });
-const getAllUsers = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const result = yield user_service_1.UserService.getAllUsers();
-        res.status(http_status_1.default.OK).json({
-            success: true,
-            statusCode: http_status_1.default.OK,
-            message: "User retrieved successfully",
-            data: result,
-        });
-    }
-    catch (error) {
-        console.log(error);
-        next(error);
-    }
-});
-exports.UserController = {
-    createUser,
-    getSingleUser,
-    updateUser,
-    deleteUser,
-    getAllUsers,
+exports.CowController = {
+    createCow,
+    getSingleCow,
+    updateCow,
+    deleteCow,
 };

@@ -1,6 +1,7 @@
 import { NextFunction, Request, RequestHandler, Response } from "express";
 import httpStatus from "http-status";
 import { CowService } from "./cow.service";
+import { SortOrder } from "mongoose";
 
 const createCow = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -70,9 +71,35 @@ const deleteCow: RequestHandler = async (req, res, next) => {
   }
 };
 
+const getAllCows: RequestHandler = async (req, res, next) => {
+  try {
+    const page = Number(req.query.page || 1);
+    const limit = Number(req.query.limit || 10);
+    const skip = (page - 1) * limit;
+    const sortBy = (req.query.sortBy as string) || "price";
+    const sortOrder: SortOrder = (req.query.sortOrder as SortOrder) || "asc";
+    const result = await CowService.getAllCows(skip, limit, sortBy, sortOrder);
+    res.status(httpStatus.OK).json({
+      success: true,
+      statusCode: httpStatus.OK,
+      message: "Cows retrieved successfully",
+      meta: {
+        page,
+        limit,
+        count: result.count,
+      },
+      data: result.result,
+    });
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
+
 export const CowController = {
   createCow,
   getSingleCow,
   updateCow,
   deleteCow,
+  getAllCows,
 };
