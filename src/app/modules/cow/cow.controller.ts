@@ -18,6 +18,27 @@ const createCow = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
+const getSingleCow = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const id = req.params.id;
+    const result = await CowService.getSingleCow(id);
+    res.status(httpStatus.OK).json({
+      success: true,
+      statusCode: httpStatus.OK,
+      message: "Cow retrieved successfully",
+      data: result,
+    });
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
+
 export const CowController = {
   createCow,
+  getSingleCow,
 };
