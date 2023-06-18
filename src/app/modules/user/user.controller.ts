@@ -1,8 +1,8 @@
-import { NextFunction, Request, Response } from "express";
+import { NextFunction, Request, RequestHandler, Response } from "express";
 import { UserService } from "./user.service";
 import httpStatus from "http-status";
 
-const createUser = async (req: Request, res: Response) => {
+const createUser = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const user = req.body;
     console.log(user);
@@ -15,7 +15,7 @@ const createUser = async (req: Request, res: Response) => {
     });
   } catch (error) {
     console.log(error);
-    res.json(error);
+    next(error);
   }
 };
 
@@ -39,7 +39,24 @@ const getSingleUser = async (
   }
 };
 
+const updateUser: RequestHandler = async (req, res, next) => {
+  try {
+    const id = req.params.id;
+    const data = req.body;
+    const result = await UserService.updateUser(id, data);
+    res.status(httpStatus.OK).json({
+      success: true,
+      statusCode: httpStatus.OK,
+      message: "User updated successfully",
+      data: result,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const UserController = {
   createUser,
   getSingleUser,
+  updateUser,
 };
