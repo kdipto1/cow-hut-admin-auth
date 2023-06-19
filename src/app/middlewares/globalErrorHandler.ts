@@ -1,6 +1,7 @@
 import { ErrorRequestHandler } from "express";
 import config from "../config";
 import ApiError from "../errors/ApiError";
+import handleValidationError from "../errors/handleValidationError";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const globalErrorHandle: ErrorRequestHandler = (err, req, res, next) => {
@@ -20,6 +21,11 @@ const globalErrorHandle: ErrorRequestHandler = (err, req, res, next) => {
           },
         ]
       : [];
+  } else if (err?.name === "ValidationError") {
+    const customErrorStack = handleValidationError(err);
+    statusCode = customErrorStack.statusCode;
+    message = customErrorStack.message;
+    errorMessages = customErrorStack.errorMessages;
   } else if (err) {
     message = err?.message;
     errorMessages = err?.message
