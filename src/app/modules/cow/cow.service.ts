@@ -10,12 +10,16 @@ const createCow = async (payload: ICOw) => {
   return result;
 };
 
-const getSingleCow = async (id: string) => {
+const getSingleCow = async (id: string): Promise<ICOw | null> => {
   const result = await Cow.findById(id).populate("seller");
+  if (!result) throw new ApiError(httpStatus.NOT_FOUND, "Cow not found");
   return result;
 };
 
-const updateCow = async (id: string, payload: Partial<ICOw>) => {
+const updateCow = async (
+  id: string,
+  payload: Partial<ICOw>
+): Promise<ICOw | null> => {
   const isExist = await Cow.findOne({ id });
   if (!isExist) {
     throw new ApiError(httpStatus.NOT_FOUND, "Cow Not found!");
@@ -28,6 +32,8 @@ const updateCow = async (id: string, payload: Partial<ICOw>) => {
 
 const deleteCow = async (id: string) => {
   const result = await Cow.findByIdAndDelete(id).populate("seller");
+  if (!result)
+    throw new ApiError(httpStatus.BAD_REQUEST, "Cow not found to delete");
   return result;
 };
 
@@ -48,8 +54,6 @@ const getAllCows = async (
    */
   const { searchTerm, minPrice, maxPrice, ...filtersData } = filters;
   const searchCondition = [];
-  const priceFilter: any = {};
-  console.log(priceFilter, minPrice);
   if (minPrice && maxPrice) {
     const priceCondition = {
       price: { $gte: Number(minPrice), $lte: Number(maxPrice) },
@@ -80,7 +84,6 @@ const getAllCows = async (
   }
   const availableSearch =
     searchCondition.length > 0 ? { $and: searchCondition } : {};
-  console.log(availableSearch);
   const result = await Cow.find(availableSearch)
     .sort(sortCondition)
     .skip(skip)
