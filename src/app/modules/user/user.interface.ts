@@ -11,7 +11,7 @@ export type IUser = {
   };
   address: string;
   budget: number;
-  income: number;
+  income?: number;
 };
 
 export type UserModel = Model<IUser, Record<string, unknown>>;

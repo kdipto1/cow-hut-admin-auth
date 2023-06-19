@@ -37,7 +37,7 @@ const userSchema = new mongoose.Schema<IUser, UserModel>(
     },
     income: {
       type: Number,
-      required: true,
+      required: false,
     },
   },
   {
