@@ -1,8 +1,8 @@
 import { ErrorRequestHandler } from "express";
-import config from "../config";
-import ApiError from "../errors/ApiError";
-import handleValidationError from "../errors/handleValidationError";
-import handleCastError from "../errors/handleCastError";
+import config from "../../config";
+import ApiError from "../../errors/ApiError";
+import handleValidationError from "../../errors/handleValidationError";
+import handleCastError from "../../errors/handleCastError";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const globalErrorHandle: ErrorRequestHandler = (err, req, res, next) => {

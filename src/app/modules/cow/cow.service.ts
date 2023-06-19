@@ -2,7 +2,7 @@ import { SortOrder } from "mongoose";
 import { ICOw, ICowFilters } from "./cow.interface";
 import { Cow } from "./cow.model";
 import { cowSearchableFields } from "./cow.constant";
-import ApiError from "../../errors/ApiError";
+import ApiError from "../../../errors/ApiError";
 import httpStatus from "http-status";
 
 const createCow = async (payload: ICOw) => {

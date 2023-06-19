@@ -3,7 +3,7 @@ import httpStatus from "http-status";
 import { CowService } from "./cow.service";
 import { SortOrder } from "mongoose";
 import { cowFilterableFields } from "./cow.constant";
-import pick from "../../shared/pick";
+import pick from "../../../shared/pick";
 
 const createCow = async (req: Request, res: Response, next: NextFunction) => {
   try {

@@ -1,3 +1,5 @@
+import httpStatus from "http-status";
+import ApiError from "../../../errors/ApiError";
 import { IUser } from "./user.interface";
 import { User } from "./user.model";
 
@@ -11,6 +13,7 @@ const createUser = async (payload: IUser): Promise<IUser> => {
 
 const getSingleUser = async (id: string): Promise<IUser | null> => {
   const result = await User.findById(id);
+  if (!result) throw new ApiError(httpStatus.BAD_REQUEST, "User not found!");
   return result;
 };
 
@@ -28,11 +31,15 @@ const updateUser = async (id: string, payload: Partial<IUser>) => {
   const result = await User.findByIdAndUpdate(id, updateUserData, {
     new: true,
   });
+  if (!result)
+    throw new ApiError(httpStatus.BAD_REQUEST, "User not available to update");
   return result;
 };
 
 const deleteUser = async (id: string) => {
   const result = await User.findByIdAndDelete(id);
+  if (!result)
+    throw new ApiError(httpStatus.BAD_REQUEST, "User not available to delete");
   return result;
 };
 

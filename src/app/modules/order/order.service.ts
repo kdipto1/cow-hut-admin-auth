@@ -1,5 +1,5 @@
 import httpStatus from "http-status";
-import ApiError from "../../errors/ApiError";
+import ApiError from "../../../errors/ApiError";
 import { Cow } from "../cow/cow.model";
 import { User } from "../user/user.model";
 import { IOrder } from "./order.interface";
