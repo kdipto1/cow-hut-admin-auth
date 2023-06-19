@@ -31,15 +31,6 @@ const cowSchema = new mongoose.Schema<ICOw, CowModel>(
     },
     breed: {
       type: String,
-      enum: [
-        "Brahman",
-        "Nellore",
-        "Sahiwal",
-        "Gir",
-        "Indigenous",
-        "Tharparkar",
-        "Kankrej",
-      ],
       required: true,
     },
     weight: {

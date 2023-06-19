@@ -13,14 +13,7 @@ export type ICOw = {
     | "Comilla"
     | "Rangpur"
     | "Mymensingh";
-  breed:
-    | "Brahman"
-    | "Nellore"
-    | "Sahiwal"
-    | "Gir"
-    | "Indigenous"
-    | "Tharparkar"
-    | "Kankrej";
+  breed: string;
   weight: number;
   label: "for sale" | "sold out";
   category: "Dairy" | "Beef" | "Dual Purpose";
