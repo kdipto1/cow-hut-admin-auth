@@ -2,6 +2,8 @@ import { SortOrder } from "mongoose";
 import { ICOw, ICowFilters } from "./cow.interface";
 import { Cow } from "./cow.model";
 import { cowSearchableFields } from "./cow.constant";
+import ApiError from "../../errors/ApiError";
+import httpStatus from "http-status";
 
 const createCow = async (payload: ICOw) => {
   const result = (await Cow.create(payload)).populate("seller");
@@ -14,6 +16,10 @@ const getSingleCow = async (id: string) => {
 };
 
 const updateCow = async (id: string, payload: Partial<ICOw>) => {
+  const isExist = await Cow.findOne({ id });
+  if (!isExist) {
+    throw new ApiError(httpStatus.NOT_FOUND, "Cow Not found!");
+  }
   const result = await Cow.findByIdAndUpdate(id, payload, {
     new: true,
   }).populate("seller");
