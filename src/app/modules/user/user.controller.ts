@@ -5,7 +5,6 @@ import httpStatus from "http-status";
 const createUser = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const user = req.body;
-    console.log(user);
     const result = await UserService.createUser(user);
     res.status(200).json({
       success: "true",
@@ -14,7 +13,6 @@ const createUser = async (req: Request, res: Response, next: NextFunction) => {
       data: result,
     });
   } catch (error) {
-    console.log(error);
     next(error);
   }
 };
@@ -34,7 +32,6 @@ const getSingleUser = async (
       data: result,
     });
   } catch (error) {
-    console.log(error);
     next(error);
   }
 };
@@ -66,7 +63,6 @@ const deleteUser: RequestHandler = async (req, res, next) => {
       data: result,
     });
   } catch (error) {
-    console.log(error);
     next(error);
   }
 };
@@ -81,7 +77,6 @@ const getAllUsers: RequestHandler = async (req, res, next) => {
       data: result,
     });
   } catch (error) {
-    console.log(error);
     next(error);
   }
 };

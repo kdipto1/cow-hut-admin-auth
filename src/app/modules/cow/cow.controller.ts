@@ -16,7 +16,6 @@ const createCow = async (req: Request, res: Response, next: NextFunction) => {
       data: result,
     });
   } catch (error) {
-    console.log(error);
     next(error);
   }
 };
@@ -36,7 +35,6 @@ const getSingleCow = async (
       data: result,
     });
   } catch (error) {
-    console.log(error);
     next(error);
   }
 };
@@ -68,7 +66,6 @@ const deleteCow: RequestHandler = async (req, res, next) => {
       data: result,
     });
   } catch (error) {
-    console.log(error);
     next(error);
   }
 };
@@ -102,7 +99,6 @@ const getAllCows: RequestHandler = async (req, res, next) => {
       data: result.result,
     });
   } catch (error) {
-    console.log(error);
     next(error);
   }
 };
