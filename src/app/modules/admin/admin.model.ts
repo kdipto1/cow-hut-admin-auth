@@ -1,5 +1,7 @@
 import mongoose from "mongoose";
 import { AdminModel, IAdmin } from "./admin.interface";
+import bcrypt from "bcrypt";
+import config from "../../../config";
 
 const adminSchema = new mongoose.Schema<IAdmin, AdminModel>(
   {
@@ -36,8 +38,21 @@ const adminSchema = new mongoose.Schema<IAdmin, AdminModel>(
     timestamps: true,
     toJSON: {
       virtuals: true,
+      transform: function (doc, ret) {
+        delete ret.password;
+      },
     },
   }
 );
+
+adminSchema.pre("save", async function (next) {
+  // eslint-disable-next-line @typescript-eslint/no-this-alias
+  const admin = this;
+  admin.password = await bcrypt.hash(
+    admin.password,
+    Number(config.bcrypt_salt_rounds)
+  );
+  next();
+});
 
 export const Admin = mongoose.model<IAdmin, AdminModel>("Admin", adminSchema);
