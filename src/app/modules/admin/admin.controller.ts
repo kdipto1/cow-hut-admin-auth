@@ -19,6 +19,22 @@ const createAdmin: RequestHandler = async (req, res, next) => {
   }
 };
 
+const loginAdmin: RequestHandler = async (req, res, next) => {
+  try {
+    const data = req.body;
+    const result = await AdminService.loginAdmin(data);
+    res.status(200).json({
+      success: "true",
+      statusCode: httpStatus.OK,
+      message: "Admin login successful",
+      data: result,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const AdminController = {
   createAdmin,
+  loginAdmin,
 };

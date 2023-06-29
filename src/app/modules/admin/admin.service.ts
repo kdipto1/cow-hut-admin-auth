@@ -6,6 +6,12 @@ const createAdmin = async (payload: IAdmin) => {
   return result;
 };
 
+const loginAdmin = async (payload: Partial<IAdmin>) => {
+  const result = await Admin.findOne({ phoneNumber: payload.phoneNumber });
+  return result;
+};
+
 export const AdminService = {
   createAdmin,
+  loginAdmin,
 };
