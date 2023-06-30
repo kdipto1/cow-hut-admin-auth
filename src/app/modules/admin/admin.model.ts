@@ -45,6 +45,21 @@ const adminSchema = new mongoose.Schema<IAdmin, AdminModel>(
   }
 );
 
+adminSchema.statics.isAdminExists = async function (
+  phone: string
+): Promise<Pick<IAdmin, "phoneNumber" | "role" | "password"> | null> {
+  return await Admin.findOne(
+    { phoneNumber: phone },
+    { _id: 1, password: 1, phoneNumber: 1, role: 1 }
+  );
+};
+adminSchema.statics.isPasswordMatched = async function (
+  incomingPass: string,
+  databasePass: string
+): Promise<boolean> {
+  return await bcrypt.compare(incomingPass, databasePass);
+};
+
 adminSchema.pre("save", async function (next) {
   // eslint-disable-next-line @typescript-eslint/no-this-alias
   const admin = this;
