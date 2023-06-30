@@ -1,6 +1,7 @@
-import { Model } from "mongoose";
+import { Model, Types } from "mongoose";
 
 export type IAdmin = {
+  _id?: Types.ObjectId;
   phoneNumber: string;
   role: "admin";
   password: string;
@@ -14,7 +15,7 @@ export type IAdmin = {
 export type AdminModel = {
   isAdminExists(
     phoneNumber: string
-  ): Promise<Pick<IAdmin, "phoneNumber" | "role" | "password"> | null>;
+  ): Promise<Pick<IAdmin, "phoneNumber" | "role" | "password" | "_id"> | null>;
   isPasswordMatched(
     incomingPass: string,
     databasePass: string

@@ -47,7 +47,7 @@ const adminSchema = new mongoose.Schema<IAdmin, AdminModel>(
 
 adminSchema.statics.isAdminExists = async function (
   phone: string
-): Promise<Pick<IAdmin, "phoneNumber" | "role" | "password"> | null> {
+): Promise<Pick<IAdmin, "phoneNumber" | "role" | "password" | "_id"> | null> {
   return await Admin.findOne(
     { phoneNumber: phone },
     { _id: 1, password: 1, phoneNumber: 1, role: 1 }
