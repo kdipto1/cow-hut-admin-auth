@@ -1,6 +1,6 @@
 import httpStatus from "http-status";
 import ApiError from "../../../errors/ApiError";
-import { IAdmin } from "./admin.interface";
+import { IAdmin, IAdminLoginResponse } from "./admin.interface";
 import { Admin } from "./admin.model";
 import { JwtHelpers } from "../../../helpers/jwtHelpers";
 import config from "../../../config";
@@ -11,7 +11,9 @@ const createAdmin = async (payload: IAdmin) => {
   return result;
 };
 
-const loginAdmin = async (payload: Partial<IAdmin>) => {
+const loginAdmin = async (
+  payload: Partial<IAdmin>
+): Promise<IAdminLoginResponse> => {
   const { phoneNumber, password } = payload;
 
   if (!phoneNumber)
@@ -36,9 +38,15 @@ const loginAdmin = async (payload: Partial<IAdmin>) => {
     config.jwt.secret as Secret,
     config.jwt.expiresIn as string
   );
+  const refreshToken = JwtHelpers.createToken(
+    { role, adminId },
+    config.jwt.refresh_secret as Secret,
+    config.jwt.refresh_secret_expiresIn as string
+  );
 
   return {
     accessToken,
+    refreshToken,
   };
 };
 

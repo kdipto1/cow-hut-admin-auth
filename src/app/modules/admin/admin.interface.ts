@@ -22,4 +22,8 @@ export type AdminModel = {
   ): Promise<boolean>;
 } & Model<IAdmin>;
 
+export type IAdminLoginResponse = {
+  accessToken: string;
+  refreshToken: string;
+};
 // export type AdminModel = Model<IAdmin, Record<string, unknown>>;
