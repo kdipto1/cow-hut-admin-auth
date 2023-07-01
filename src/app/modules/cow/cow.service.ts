@@ -4,6 +4,7 @@ import { Cow } from "./cow.model";
 import { cowSearchableFields } from "./cow.constant";
 import ApiError from "../../../errors/ApiError";
 import httpStatus from "http-status";
+import { JwtPayload } from "jsonwebtoken";
 
 const createCow = async (payload: ICOw) => {
   const result = (await Cow.create(payload)).populate("seller");
@@ -18,22 +19,40 @@ const getSingleCow = async (id: string): Promise<ICOw | null> => {
 
 const updateCow = async (
   id: string,
+  seller: JwtPayload,
   payload: Partial<ICOw>
 ): Promise<ICOw | null> => {
-  const isExist = await Cow.findOne({ id });
+  const isExist = await Cow.findById(id);
   if (!isExist) {
     throw new ApiError(httpStatus.NOT_FOUND, "Cow Not found!");
   }
+  // const cowSellerId = isExist.seller;
+  // console.log(seller);
+  if (seller.userId !== isExist.seller.toString())
+    throw new ApiError(
+      httpStatus.BAD_REQUEST,
+      "You are not seller of this cow"
+    );
+
   const result = await Cow.findByIdAndUpdate(id, payload, {
     new: true,
   }).populate("seller");
   return result;
 };
 
-const deleteCow = async (id: string) => {
+const deleteCow = async (id: string, seller: JwtPayload) => {
+  const isExist = await Cow.findById(id);
+  if (!isExist)
+    throw new ApiError(httpStatus.BAD_REQUEST, "Cow not found by this id");
+
+  if (seller.userId !== isExist.seller.toString())
+    throw new ApiError(
+      httpStatus.BAD_REQUEST,
+      "You are not seller of this cow"
+    );
   const result = await Cow.findByIdAndDelete(id).populate("seller");
   if (!result)
-    throw new ApiError(httpStatus.BAD_REQUEST, "Cow not found to delete");
+    throw new ApiError(httpStatus.BAD_REQUEST, "Cow couldn't delete");
   return result;
 };
 

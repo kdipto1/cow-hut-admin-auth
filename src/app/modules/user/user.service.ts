@@ -76,7 +76,7 @@ const loginUser = async (
     config.jwt.expiresIn as string
   );
   const refreshToken = JwtHelpers.createToken(
-    { role, userId },
+    { userId, role },
     config.jwt.refresh_secret as Secret,
     config.jwt.refresh_secret_expiresIn as string
   );
@@ -98,7 +98,6 @@ const refreshToken = async (token: string) => {
     throw new ApiError(httpStatus.FORBIDDEN, "Invalid refresh token");
   }
   const { userId } = verifiedToken;
-  console.log(verifiedToken);
   const isUserExists = await User.isUserExistsWithId(userId);
   if (!isUserExists) throw new ApiError(httpStatus.NOT_FOUND, "User not found");
   const accessToken = JwtHelpers.createToken(

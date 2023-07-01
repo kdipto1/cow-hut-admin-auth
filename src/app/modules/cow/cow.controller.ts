@@ -42,8 +42,9 @@ const getSingleCow = async (
 const updateCow: RequestHandler = async (req, res, next) => {
   try {
     const id = req.params.id;
+    const seller = req.user;
     const data = req.body;
-    const result = await CowService.updateCow(id, data);
+    const result = await CowService.updateCow(id, seller, data);
     res.status(httpStatus.OK).json({
       success: true,
       statusCode: httpStatus.OK,
@@ -58,7 +59,8 @@ const updateCow: RequestHandler = async (req, res, next) => {
 const deleteCow: RequestHandler = async (req, res, next) => {
   try {
     const id = req.params.id;
-    const result = await CowService.deleteCow(id);
+    const seller = req.user;
+    const result = await CowService.deleteCow(id, seller);
     res.status(httpStatus.OK).json({
       success: true,
       statusCode: httpStatus.OK,
