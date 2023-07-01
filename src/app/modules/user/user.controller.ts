@@ -1,6 +1,7 @@
 import { NextFunction, Request, RequestHandler, Response } from "express";
 import { UserService } from "./user.service";
 import httpStatus from "http-status";
+// import config from "../../../config";
 
 const createUser = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -81,10 +82,33 @@ const getAllUsers: RequestHandler = async (req, res, next) => {
   }
 };
 
+// const loginUser: RequestHandler = async (req, res, next) => {
+//   try {
+//     const data = req.body;
+//     // const result = await UserService.loginUser(data);
+
+//     const { refreshToken, ...otherResults } = result;
+//     const cookieOptions = {
+//       secure: config.env === "production",
+//       httpOnly: true,
+//     };
+//     res.cookie("refreshToken", refreshToken, cookieOptions);
+//     res.status(200).json({
+//       success: "true",
+//       statusCode: httpStatus.OK,
+//       message: "User logged in successfully",
+//       data: otherResults,
+//     });
+//   } catch (error) {
+//     next(error);
+//   }
+// };
+
 export const UserController = {
   createUser,
   getSingleUser,
   updateUser,
   deleteUser,
   getAllUsers,
+  // loginUser,
 };

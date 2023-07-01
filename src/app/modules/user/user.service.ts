@@ -2,6 +2,8 @@ import httpStatus from "http-status";
 import ApiError from "../../../errors/ApiError";
 import { IUser } from "./user.interface";
 import { User } from "./user.model";
+// import { JwtHelpers } from "../../../helpers/jwtHelpers";
+// import config from "../../../config";
 
 const createUser = async (payload: IUser): Promise<IUser> => {
   payload.income = 0;
@@ -46,10 +48,15 @@ const getAllUsers = async (): Promise<IUser[]> => {
   return result;
 };
 
+// const loginUser = async (
+//   payload: Partial<IUser>
+// ): Promise<IUserLoginResponse> => {};
+
 export const UserService = {
   createUser,
   getSingleUser,
   updateUser,
   deleteUser,
   getAllUsers,
+  // loginUser,
 };

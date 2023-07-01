@@ -53,6 +53,21 @@ const userSchema = new mongoose.Schema<IUser, UserModel>(
   }
 );
 
+userSchema.statics.isUserExists = async function (
+  phone: string
+): Promise<Pick<IUser, "phoneNumber" | "role" | "password" | "_id"> | null> {
+  return await User.findOne(
+    { phoneNumber: phone },
+    { _id: 1, password: 1, phoneNumber: 1, role: 1 }
+  );
+};
+userSchema.statics.isPasswordMatched = async function (
+  incomingPass: string,
+  databasePass: string
+): Promise<boolean> {
+  return await bcrypt.compare(incomingPass, databasePass);
+};
+
 userSchema.pre("save", async function (next) {
   // eslint-disable-next-line @typescript-eslint/no-this-alias
   const user = this;
