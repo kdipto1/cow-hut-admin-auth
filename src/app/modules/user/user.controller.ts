@@ -104,6 +104,26 @@ const loginUser: RequestHandler = async (req, res, next) => {
   }
 };
 
+const refreshToken: RequestHandler = async (req, res, next) => {
+  try {
+    const { refreshToken } = req.cookies;
+    const result = await UserService.refreshToken(refreshToken);
+    const cookieOptions = {
+      secure: config.env === "production",
+      httpOnly: true,
+    };
+    res.cookie("refreshToken", refreshToken, cookieOptions);
+    res.status(200).json({
+      success: "true",
+      statusCode: httpStatus.OK,
+      message: "New access token generated successfully",
+      data: result,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const UserController = {
   createUser,
   getSingleUser,
@@ -111,4 +131,5 @@ export const UserController = {
   deleteUser,
   getAllUsers,
   loginUser,
+  refreshToken,
 };

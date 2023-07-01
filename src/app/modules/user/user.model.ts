@@ -61,6 +61,14 @@ userSchema.statics.isUserExists = async function (
     { _id: 1, password: 1, phoneNumber: 1, role: 1 }
   );
 };
+userSchema.statics.isUserExistsWithId = async function (
+  userId: string
+): Promise<Pick<IUser, "phoneNumber" | "role" | "password" | "_id"> | null> {
+  return await User.findOne(
+    { _id: userId },
+    { _id: 1, password: 1, phoneNumber: 1, role: 1 }
+  );
+};
 userSchema.statics.isPasswordMatched = async function (
   incomingPass: string,
   databasePass: string

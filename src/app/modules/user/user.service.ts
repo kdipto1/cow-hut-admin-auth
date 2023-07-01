@@ -4,7 +4,7 @@ import { IUser, IUserLoginResponse } from "./user.interface";
 import { User } from "./user.model";
 import { JwtHelpers } from "../../../helpers/jwtHelpers";
 import config from "../../../config";
-import { Secret } from "jsonwebtoken";
+import { JwtPayload, Secret } from "jsonwebtoken";
 
 const createUser = async (payload: IUser): Promise<IUser> => {
   payload.income = 0;
@@ -71,7 +71,7 @@ const loginUser = async (
 
   const { role, _id: userId } = isUserExists;
   const accessToken = JwtHelpers.createToken(
-    { role, userId },
+    { userId, role },
     config.jwt.secret as Secret,
     config.jwt.expiresIn as string
   );
@@ -87,6 +87,33 @@ const loginUser = async (
   };
 };
 
+const refreshToken = async (token: string) => {
+  let verifiedToken = null;
+  try {
+    verifiedToken = JwtHelpers.verifyToken(
+      token,
+      config.jwt.refresh_secret as Secret
+    ) as JwtPayload;
+  } catch (error) {
+    throw new ApiError(httpStatus.FORBIDDEN, "Invalid refresh token");
+  }
+  const { userId } = verifiedToken;
+  console.log(verifiedToken);
+  const isUserExists = await User.isUserExistsWithId(userId);
+  if (!isUserExists) throw new ApiError(httpStatus.NOT_FOUND, "User not found");
+  const accessToken = JwtHelpers.createToken(
+    {
+      userId: isUserExists._id,
+      role: isUserExists.role,
+    },
+    config.jwt.secret as Secret,
+    config.jwt.expiresIn as string
+  );
+  return {
+    accessToken,
+  };
+};
+
 export const UserService = {
   createUser,
   getSingleUser,
@@ -94,4 +121,5 @@ export const UserService = {
   deleteUser,
   getAllUsers,
   loginUser,
+  refreshToken,
 };
