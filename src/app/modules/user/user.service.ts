@@ -1,9 +1,10 @@
 import httpStatus from "http-status";
 import ApiError from "../../../errors/ApiError";
-import { IUser } from "./user.interface";
+import { IUser, IUserLoginResponse } from "./user.interface";
 import { User } from "./user.model";
-// import { JwtHelpers } from "../../../helpers/jwtHelpers";
-// import config from "../../../config";
+import { JwtHelpers } from "../../../helpers/jwtHelpers";
+import config from "../../../config";
+import { Secret } from "jsonwebtoken";
 
 const createUser = async (payload: IUser): Promise<IUser> => {
   payload.income = 0;
@@ -48,9 +49,43 @@ const getAllUsers = async (): Promise<IUser[]> => {
   return result;
 };
 
-// const loginUser = async (
-//   payload: Partial<IUser>
-// ): Promise<IUserLoginResponse> => {};
+const loginUser = async (
+  payload: Partial<IUser>
+): Promise<IUserLoginResponse> => {
+  const { phoneNumber, password } = payload;
+
+  if (!phoneNumber)
+    throw new ApiError(httpStatus.BAD_REQUEST, "Phone number is required");
+  const isUserExists = await User.isUserExists(phoneNumber);
+  if (!isUserExists) throw new ApiError(httpStatus.NOT_FOUND, "User not found");
+
+  if (!password)
+    throw new ApiError(httpStatus.BAD_REQUEST, "Password is required");
+
+  const passwordMatch = await User.isPasswordMatched(
+    password,
+    isUserExists.password
+  );
+  if (!passwordMatch)
+    throw new ApiError(httpStatus.UNAUTHORIZED, "Invalid password");
+
+  const { role, _id: userId } = isUserExists;
+  const accessToken = JwtHelpers.createToken(
+    { role, userId },
+    config.jwt.secret as Secret,
+    config.jwt.expiresIn as string
+  );
+  const refreshToken = JwtHelpers.createToken(
+    { role, userId },
+    config.jwt.refresh_secret as Secret,
+    config.jwt.refresh_secret_expiresIn as string
+  );
+
+  return {
+    accessToken,
+    refreshToken,
+  };
+};
 
 export const UserService = {
   createUser,
@@ -58,5 +93,5 @@ export const UserService = {
   updateUser,
   deleteUser,
   getAllUsers,
-  // loginUser,
+  loginUser,
 };
