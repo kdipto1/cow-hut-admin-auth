@@ -49,7 +49,7 @@ const getAllOrders = async (user: JwtPayload): Promise<IOrder[] | unknown> => {
   if (role === "admin") {
     result = await Order.find({});
   } else if (role === "buyer") {
-    result = await Order.find({ buyer: user.userId });
+    result = await Order.find({ buyer: userId });
   } else if (role === "seller") {
     const orders = await Order.find({})
       .populate({

@@ -4,7 +4,7 @@ import { IAdmin, IAdminLoginResponse } from "./admin.interface";
 import { Admin } from "./admin.model";
 import { JwtHelpers } from "../../../helpers/jwtHelpers";
 import config from "../../../config";
-import { Secret } from "jsonwebtoken";
+import { JwtPayload, Secret } from "jsonwebtoken";
 
 const createAdmin = async (payload: IAdmin) => {
   const result = await Admin.create(payload);
@@ -50,7 +50,24 @@ const loginAdmin = async (
   };
 };
 
+const getMyProfile = async (payload: JwtPayload | string) => {
+  const adminId = typeof payload === "string" ? payload : payload.adminId;
+
+  if (!adminId) {
+    throw new ApiError(httpStatus.UNAUTHORIZED, "Invalid admin ID");
+  }
+
+  const result = await Admin.findById(adminId);
+
+  if (!result) {
+    throw new ApiError(httpStatus.NOT_FOUND, "Admin not found");
+  }
+
+  return result;
+};
+
 export const AdminService = {
   createAdmin,
   loginAdmin,
+  getMyProfile,
 };

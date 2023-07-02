@@ -12,11 +12,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.User = void 0;
+exports.Admin = void 0;
 const mongoose_1 = __importDefault(require("mongoose"));
-const config_1 = __importDefault(require("../../../config"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
-const userSchema = new mongoose_1.default.Schema({
+const config_1 = __importDefault(require("../../../config"));
+const adminSchema = new mongoose_1.default.Schema({
     phoneNumber: {
         type: String,
         required: true,
@@ -24,7 +24,7 @@ const userSchema = new mongoose_1.default.Schema({
     },
     role: {
         type: String,
-        enum: ["seller", "buyer"],
+        enum: ["admin"],
         required: true,
     },
     password: {
@@ -45,14 +45,6 @@ const userSchema = new mongoose_1.default.Schema({
         type: String,
         required: true,
     },
-    budget: {
-        type: Number,
-        required: true,
-    },
-    income: {
-        type: Number,
-        required: false,
-    },
 }, {
     timestamps: true,
     toJSON: {
@@ -62,27 +54,22 @@ const userSchema = new mongoose_1.default.Schema({
         },
     },
 });
-userSchema.statics.isUserExists = function (phone) {
+adminSchema.statics.isAdminExists = function (phone) {
     return __awaiter(this, void 0, void 0, function* () {
-        return yield exports.User.findOne({ phoneNumber: phone }, { _id: 1, password: 1, phoneNumber: 1, role: 1 });
+        return yield exports.Admin.findOne({ phoneNumber: phone }, { _id: 1, password: 1, phoneNumber: 1, role: 1 });
     });
 };
-userSchema.statics.isUserExistsWithId = function (userId) {
-    return __awaiter(this, void 0, void 0, function* () {
-        return yield exports.User.findOne({ _id: userId }, { _id: 1, password: 1, phoneNumber: 1, role: 1 });
-    });
-};
-userSchema.statics.isPasswordMatched = function (incomingPass, databasePass) {
+adminSchema.statics.isPasswordMatched = function (incomingPass, databasePass) {
     return __awaiter(this, void 0, void 0, function* () {
         return yield bcrypt_1.default.compare(incomingPass, databasePass);
     });
 };
-userSchema.pre("save", function (next) {
+adminSchema.pre("save", function (next) {
     return __awaiter(this, void 0, void 0, function* () {
         // eslint-disable-next-line @typescript-eslint/no-this-alias
-        const user = this;
-        user.password = yield bcrypt_1.default.hash(user.password, Number(config_1.default.bcrypt_salt_rounds));
+        const admin = this;
+        admin.password = yield bcrypt_1.default.hash(admin.password, Number(config_1.default.bcrypt_salt_rounds));
         next();
     });
 });
-exports.User = mongoose_1.default.model("User", userSchema);
+exports.Admin = mongoose_1.default.model("Admin", adminSchema);
