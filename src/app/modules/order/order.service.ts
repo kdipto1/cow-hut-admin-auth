@@ -5,6 +5,7 @@ import { User } from "../user/user.model";
 import { IOrder } from "./order.interface";
 import { Order } from "./order.model";
 import { startSession } from "mongoose";
+import { JwtPayload } from "jsonwebtoken";
 
 const createOrder = async (payload: IOrder) => {
   const { cow, buyer } = payload;
@@ -42,8 +43,22 @@ const createOrder = async (payload: IOrder) => {
   }
 };
 
-const getAllOrders = async (): Promise<IOrder[]> => {
-  const result = await Order.find({});
+const getAllOrders = async (user: JwtPayload): Promise<IOrder[] | unknown> => {
+  const { userId, role } = user;
+  let result;
+  if (role === "admin") {
+    result = await Order.find({});
+  } else if (role === "buyer") {
+    result = await Order.find({ buyer: user.userId });
+  } else if (role === "seller") {
+    const orders = await Order.find({})
+      .populate({
+        path: "cow",
+        match: { seller: userId },
+      })
+      .exec();
+    result = orders.filter(order => order.cow !== null);
+  }
   return result;
 };
 

@@ -19,11 +19,12 @@ const createOrder: RequestHandler = async (req, res, next) => {
 
 const getAllOrders: RequestHandler = async (req, res, next) => {
   try {
-    const result = await OrderService.getAllOrders();
+    const user = req.user;
+    const result = await OrderService.getAllOrders(user);
     res.status(httpStatus.OK).json({
       success: true,
       statusCode: httpStatus.OK,
-      message: "Orders retrieved successfully",
+      message: `Orders retrieved successfully for ${user.role}`,
       data: result,
     });
   } catch (error) {
