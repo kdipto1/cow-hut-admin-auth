@@ -56,11 +56,12 @@ const loginUser = async (
 
   if (!phoneNumber)
     throw new ApiError(httpStatus.BAD_REQUEST, "Phone number is required");
-  const isUserExists = await User.isUserExists(phoneNumber);
-  if (!isUserExists) throw new ApiError(httpStatus.NOT_FOUND, "User not found");
-
   if (!password)
     throw new ApiError(httpStatus.BAD_REQUEST, "Password is required");
+
+  const isUserExists = await User.isUserExists(phoneNumber);
+
+  if (!isUserExists) throw new ApiError(httpStatus.NOT_FOUND, "User not found");
 
   const passwordMatch = await User.isPasswordMatched(
     password,

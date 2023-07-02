@@ -2,9 +2,6 @@ import { NextFunction, Request, RequestHandler, Response } from "express";
 import { UserService } from "./user.service";
 import httpStatus from "http-status";
 import config from "../../../config";
-import { JwtHelpers } from "../../../helpers/jwtHelpers";
-import { Secret } from "jsonwebtoken";
-import ApiError from "../../../errors/ApiError";
 
 const createUser = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -129,13 +126,7 @@ const refreshToken: RequestHandler = async (req, res, next) => {
 
 const getMyProfile: RequestHandler = async (req, res, next) => {
   try {
-    const { authorization } = req.headers;
-    const user = JwtHelpers.verifyToken(
-      authorization as string,
-      config.jwt.secret as Secret
-    );
-    if (!user) throw new ApiError(httpStatus.UNAUTHORIZED, "Invalid token");
-    // const userId = user.userId
+    const user = req.user;
     const result = await UserService.getMyProfile(user);
     res.status(200).json({
       success: "true",
@@ -149,13 +140,8 @@ const getMyProfile: RequestHandler = async (req, res, next) => {
 };
 const updateMyProfile: RequestHandler = async (req, res, next) => {
   try {
-    const { authorization } = req.headers;
+    const user = req.user;
     const data = req.body;
-    const user = JwtHelpers.verifyToken(
-      authorization as string,
-      config.jwt.secret as Secret
-    );
-    if (!user) throw new ApiError(httpStatus.UNAUTHORIZED, "Invalid token");
     const result = await UserService.updateMyProfile(user, data);
     res.status(200).json({
       success: "true",
