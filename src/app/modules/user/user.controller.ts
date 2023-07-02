@@ -73,7 +73,6 @@ const deleteUser: RequestHandler = async (req, res, next) => {
 
 const getAllUsers: RequestHandler = async (req, res, next) => {
   try {
-    console.log(req.user);
     const result = await UserService.getAllUsers();
     res.status(httpStatus.OK).json({
       success: true,

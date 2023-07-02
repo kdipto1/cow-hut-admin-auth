@@ -129,6 +129,7 @@ const getMyProfile = async (payload: JwtPayload | string) => {
 
   return result;
 };
+
 const updateMyProfile = async (
   payload: JwtPayload | string,
   data: Partial<IUser>

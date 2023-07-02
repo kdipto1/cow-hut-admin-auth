@@ -2,9 +2,6 @@ import { RequestHandler } from "express";
 import httpStatus from "http-status";
 import { AdminService } from "./admin.service";
 import config from "../../../config";
-import { JwtHelpers } from "../../../helpers/jwtHelpers";
-import ApiError from "../../../errors/ApiError";
-import { Secret } from "jsonwebtoken";
 
 const createAdmin: RequestHandler = async (req, res, next) => {
   try {
@@ -46,14 +43,8 @@ const loginAdmin: RequestHandler = async (req, res, next) => {
 
 const getMyProfile: RequestHandler = async (req, res, next) => {
   try {
-    const { authorization } = req.headers;
-    const user = JwtHelpers.verifyToken(
-      authorization as string,
-      config.jwt.secret as Secret
-    );
-    if (!user) throw new ApiError(httpStatus.UNAUTHORIZED, "Invalid token");
-    // const userId = user.userId
-    const result = await AdminService.getMyProfile(user);
+    const admin = req.user;
+    const result = await AdminService.getMyProfile(admin);
     res.status(200).json({
       success: "true",
       statusCode: httpStatus.OK,
@@ -65,8 +56,25 @@ const getMyProfile: RequestHandler = async (req, res, next) => {
   }
 };
 
+const updateMyProfile: RequestHandler = async (req, res, next) => {
+  try {
+    const admin = req.user;
+    const data = req.body;
+    const result = await AdminService.updateMyProfile(admin, data);
+    res.status(200).json({
+      success: "true",
+      statusCode: httpStatus.OK,
+      message: "Admin's information updated successfully",
+      data: result,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const AdminController = {
   createAdmin,
   loginAdmin,
   getMyProfile,
+  updateMyProfile,
 };

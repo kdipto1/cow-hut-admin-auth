@@ -50,7 +50,7 @@ const loginAdmin = async (
   };
 };
 
-const getMyProfile = async (payload: JwtPayload | string) => {
+const getMyProfile = async (payload: JwtPayload | string): Promise<IAdmin> => {
   const adminId = typeof payload === "string" ? payload : payload.adminId;
 
   if (!adminId) {
@@ -66,8 +66,40 @@ const getMyProfile = async (payload: JwtPayload | string) => {
   return result;
 };
 
+const updateMyProfile = async (
+  payload: JwtPayload | string,
+  data: Partial<IAdmin>
+) => {
+  const adminId = typeof payload === "string" ? payload : payload.adminId;
+  if (!adminId) {
+    throw new ApiError(httpStatus.UNAUTHORIZED, "Invalid admin ID");
+  }
+
+  const admin = await Admin.findById(adminId, { _id: 1 });
+  if (!admin) {
+    throw new ApiError(httpStatus.NOT_FOUND, "Admin not found");
+  }
+
+  /* Update user date --> */
+  const { name, ...adminData } = data;
+
+  const updateAdminData: Partial<IAdmin> = { ...adminData };
+  if (name && Object.keys(name).length) {
+    Object.keys(name).forEach(key => {
+      const nameKey = `name.${key}` as keyof Partial<IAdmin>;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (updateAdminData as any)[nameKey] = name[key as keyof typeof name];
+    });
+  }
+  const result = await Admin.findByIdAndUpdate(admin._id, updateAdminData, {
+    new: true,
+  });
+  return result;
+};
+
 export const AdminService = {
   createAdmin,
   loginAdmin,
   getMyProfile,
+  updateMyProfile,
 };
