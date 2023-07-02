@@ -129,6 +129,36 @@ const getMyProfile = async (payload: JwtPayload | string) => {
 
   return result;
 };
+const updateMyProfile = async (
+  payload: JwtPayload | string,
+  data: Partial<IUser>
+) => {
+  const userId = typeof payload === "string" ? payload : payload.userId;
+  if (!userId) {
+    throw new ApiError(httpStatus.UNAUTHORIZED, "Invalid user ID");
+  }
+
+  const user = await User.findById(userId, { _id: 1 });
+  if (!user) {
+    throw new ApiError(httpStatus.NOT_FOUND, "User not found");
+  }
+
+  /* Update user date --> */
+  const { name, ...userData } = data;
+
+  const updateUserData: Partial<IUser> = { ...userData };
+  if (name && Object.keys(name).length) {
+    Object.keys(name).forEach(key => {
+      const nameKey = `name.${key}` as keyof Partial<IUser>;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (updateUserData as any)[nameKey] = name[key as keyof typeof name];
+    });
+  }
+  const result = await User.findByIdAndUpdate(user._id, updateUserData, {
+    new: true,
+  });
+  return result;
+};
 
 export const UserService = {
   createUser,
@@ -139,4 +169,5 @@ export const UserService = {
   loginUser,
   refreshToken,
   getMyProfile,
+  updateMyProfile,
 };

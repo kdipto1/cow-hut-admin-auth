@@ -150,7 +150,20 @@ const getMyProfile: RequestHandler = async (req, res, next) => {
 };
 const updateMyProfile: RequestHandler = async (req, res, next) => {
   try {
-    console.log("");
+    const { authorization } = req.headers;
+    const data = req.body;
+    const user = JwtHelpers.verifyToken(
+      authorization as string,
+      config.jwt.secret as Secret
+    );
+    if (!user) throw new ApiError(httpStatus.UNAUTHORIZED, "Invalid token");
+    const result = await UserService.updateMyProfile(user, data);
+    res.status(200).json({
+      success: "true",
+      statusCode: httpStatus.OK,
+      message: "User's information updated successfully",
+      data: result,
+    });
   } catch (error) {
     next(error);
   }
