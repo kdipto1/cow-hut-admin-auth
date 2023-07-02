@@ -113,6 +113,23 @@ const refreshToken = async (token: string) => {
   };
 };
 
+const getMyProfile = async (payload: JwtPayload | string) => {
+  const userId = typeof payload === "string" ? payload : payload.userId;
+
+  console.log(payload, userId);
+  if (!userId) {
+    throw new ApiError(httpStatus.UNAUTHORIZED, "Invalid user ID");
+  }
+
+  const result = await User.findById(userId);
+
+  if (!result) {
+    throw new ApiError(httpStatus.NOT_FOUND, "User not found");
+  }
+
+  return result;
+};
+
 export const UserService = {
   createUser,
   getSingleUser,
@@ -121,4 +138,5 @@ export const UserService = {
   getAllUsers,
   loginUser,
   refreshToken,
+  getMyProfile,
 };

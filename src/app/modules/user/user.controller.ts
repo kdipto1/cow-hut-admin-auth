@@ -2,6 +2,9 @@ import { NextFunction, Request, RequestHandler, Response } from "express";
 import { UserService } from "./user.service";
 import httpStatus from "http-status";
 import config from "../../../config";
+import { JwtHelpers } from "../../../helpers/jwtHelpers";
+import { Secret } from "jsonwebtoken";
+import ApiError from "../../../errors/ApiError";
 
 const createUser = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -125,6 +128,34 @@ const refreshToken: RequestHandler = async (req, res, next) => {
   }
 };
 
+const getMyProfile: RequestHandler = async (req, res, next) => {
+  try {
+    const { authorization } = req.headers;
+    const user = JwtHelpers.verifyToken(
+      authorization as string,
+      config.jwt.secret as Secret
+    );
+    if (!user) throw new ApiError(httpStatus.UNAUTHORIZED, "Invalid token");
+    // const userId = user.userId
+    const result = await UserService.getMyProfile(user);
+    res.status(200).json({
+      success: "true",
+      statusCode: httpStatus.OK,
+      message: "User's information retrieved successfully",
+      data: result,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+const updateMyProfile: RequestHandler = async (req, res, next) => {
+  try {
+    console.log("");
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const UserController = {
   createUser,
   getSingleUser,
@@ -133,4 +164,6 @@ export const UserController = {
   getAllUsers,
   loginUser,
   refreshToken,
+  getMyProfile,
+  updateMyProfile,
 };

@@ -8,6 +8,8 @@ const router = express.Router();
 router.post("/auth/signup", UserController.createUser);
 router.post("/auth/login", UserController.loginUser);
 router.post("/auth/refresh-token", UserController.refreshToken);
+router.get("/users/my-profile", UserController.getMyProfile);
+router.patch("/users/my-profile", UserController.updateMyProfile);
 router.get(
   "/users/:id",
   auth(ENUM_USER_ROLE.ADMIN),

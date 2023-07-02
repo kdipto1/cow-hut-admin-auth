@@ -42,8 +42,7 @@ const updateCow = async (
 
 const deleteCow = async (id: string, seller: JwtPayload) => {
   const isExist = await Cow.findById(id);
-  if (!isExist)
-    throw new ApiError(httpStatus.BAD_REQUEST, "Cow not found by this id");
+  if (!isExist) throw new ApiError(httpStatus.BAD_REQUEST, "Cow not found!");
 
   if (seller.userId !== isExist.seller.toString())
     throw new ApiError(
