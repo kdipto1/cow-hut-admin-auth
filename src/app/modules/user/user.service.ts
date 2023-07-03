@@ -46,11 +46,14 @@ const deleteUser = async (id: string) => {
 };
 
 const getAllUsers = async (): Promise<IUser[]> => {
-  // await User.updateMany({}, { $set: { password: "s3cur3p@ssw0rd" } });
   const result = await User.find({});
   return result;
 };
 
+/**
+ * !this route is to hash password of all users in database
+ * !not recommended to use
+ */
 // const getAllUsers = async (): Promise<IUser[]> => {
 //   try {
 //     // Retrieve all documents from the collection
@@ -155,7 +158,6 @@ const refreshToken = async (token: string) => {
 const getMyProfile = async (payload: JwtPayload | string) => {
   const userId = typeof payload === "string" ? payload : payload.userId;
 
-  console.log(payload, userId);
   if (!userId) {
     throw new ApiError(httpStatus.UNAUTHORIZED, "Invalid user ID");
   }

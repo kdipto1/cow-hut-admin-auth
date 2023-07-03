@@ -6,6 +6,7 @@ import handleCastError from "../../errors/handleCastError";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const globalErrorHandle: ErrorRequestHandler = (err, req, res, next) => {
+  // eslint-disable-next-line no-console
   if (config.env === "development") console.log("Global Error Handler:", err);
   let statusCode = 500;
   // let success = false;

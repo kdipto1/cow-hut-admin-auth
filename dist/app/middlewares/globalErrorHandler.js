@@ -9,6 +9,7 @@ const handleValidationError_1 = __importDefault(require("../../errors/handleVali
 const handleCastError_1 = __importDefault(require("../../errors/handleCastError"));
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const globalErrorHandle = (err, req, res, next) => {
+    // eslint-disable-next-line no-console
     if (config_1.default.env === "development")
         console.log("Global Error Handler:", err);
     let statusCode = 500;

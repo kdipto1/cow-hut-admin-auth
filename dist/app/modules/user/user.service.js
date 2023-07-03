@@ -65,10 +65,13 @@ const deleteUser = (id) => __awaiter(void 0, void 0, void 0, function* () {
     return result;
 });
 const getAllUsers = () => __awaiter(void 0, void 0, void 0, function* () {
-    // await User.updateMany({}, { $set: { password: "s3cur3p@ssw0rd" } });
     const result = yield user_model_1.User.find({});
     return result;
 });
+/**
+ * !this route is to hash password of all users in database
+ * !not recommended to use
+ */
 // const getAllUsers = async (): Promise<IUser[]> => {
 //   try {
 //     // Retrieve all documents from the collection
@@ -144,7 +147,6 @@ const refreshToken = (token) => __awaiter(void 0, void 0, void 0, function* () {
 });
 const getMyProfile = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     const userId = typeof payload === "string" ? payload : payload.userId;
-    console.log(payload, userId);
     if (!userId) {
         throw new ApiError_1.default(http_status_1.default.UNAUTHORIZED, "Invalid user ID");
     }
