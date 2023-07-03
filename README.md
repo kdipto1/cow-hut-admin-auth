@@ -1,34 +1,59 @@
-### [Live Link](https://bikroy-cow-server.vercel.app/) : https://bikroy-cow-server.vercel.app/
+### [Live Link](https://bikroy-cow-admin-server.vercel.app/) : https://bikroy-cow-admin-server.vercel.app/
 
 ---
 
 ## Application Routes:
 
+# Main Part
+
+---
+
+### Auth(User)
+
+- Route: https://bikroy-cow-admin-server.vercel.app/api/v1/auth/login **(POST)**
+- Route: https://bikroy-cow-admin-server.vercel.app/api/v1/auth/signup **(POST)**
+- Route: https://bikroy-cow-admin-server.vercel.app/api/v1/auth/refresh-token **(POST)**
+
+### Auth(Admin)
+
+- Route: https://bikroy-cow-admin-server.vercel.app/api/v1/admins/create-admin **(POST)**
+- Route: https://bikroy-cow-admin-server.vercel.app/api/v1/admins/login **(POST)**
+
 ### User
 
-- api/v1/auth/signup **(POST)**
-- api/v1/users **(GET)**
-- api/v1/users/6490593e9ed77d4885d9649b **(Single GET)**
-- api/v1/users/6490593e9ed77d4885d9649b **(PATCH)**
-- api/v1/users/6490593e9ed77d4885d9649b **(DELETE)**
+- Route: https://bikroy-cow-admin-server.vercel.app/api/v1/users **(GET)**
+- Route: https://bikroy-cow-admin-server.vercel.app/api/v1/users/6490593e9ed77d4885d9649b **(Single GET)**
+- Route: https://bikroy-cow-admin-server.vercel.app/api/v1/users/6490593e9ed77d4885d9649b **(PATCH)**
+- Route: https://bikroy-cow-admin-server.vercel.app/api/v1/users/6490593e9ed77d4885d9649b **(DELETE)**
 
 ### Cows
 
-- api/v1/cows **(POST)**
-- api/v1/cows **(GET)**
-- api/v1/cows/649061469ed77d4885d964d4 **(Single GET)**
-- api/v1/cows/649061469ed77d4885d964d4 **(PATCH)**
-- api/v1/cows/649061469ed77d4885d964d4 **(DELETE)**
-
-### Pagination and Filtering routes of Cows
-
-- api/v1/cows?pag=1&limit=10
-- api/v1/cows?sortBy=price&sortOrder=asc
-- api/v1/cows?minPrice=20000&maxPrice=70000
-- api/v1/cows?location=Chattogram
-- api/v1/cows?searchTerm=Cha
+- Route: https://bikroy-cow-admin-server.vercel.app/api/v1/cows **(POST)**
+- Route: https://bikroy-cow-admin-server.vercel.app/api/v1/cows **(GET)**
+- Route: https://bikroy-cow-admin-server.vercel.app/api/v1/cows/649061469ed77d4885d964d4 **(Single GET)**
+- Route: https://bikroy-cow-admin-server.vercel.app/api/v1/cows/649061469ed77d4885d964d4 **(PATCH)**
+- Route: https://bikroy-cow-admin-server.vercel.app/api/v1/cows/649061469ed77d4885d964d4 **(DELETE)**
 
 ### Orders
 
-- api/v1/orders **(POST)**
-- api/v1/orders **(GET)**
+- Route: https://bikroy-cow-admin-server.vercel.app/api/v1/orders **(POST)**
+- Route: https://bikroy-cow-admin-server.vercel.app/api/v1/orders **(GET)**
+
+# Bonus Part
+
+---
+
+### Admin
+
+- Route: https://bikroy-cow-admin-server.vercel.app/api/v1/admins/create-admin **(POST)**
+
+### My Profile
+
+- Route: https://bikroy-cow-admin-server.vercel.app/api/v1/users/my-profile **(GET)**
+- Route: https://bikroy-cow-admin-server.vercel.app/api/v1/users/my-profile **(PATCH)**
+- Route: https://bikroy-cow-admin-server.vercel.app/api/v1/admins/my-profile **(GET)**
+- Route: https://bikroy-cow-admin-server.vercel.app/api/v1/admins/my-profile **(PATCH)**
+
+### Order
+
+- Route: https://bikroy-cow-admin-server.vercel.app/api/v1/orders/6490727d0af4d55e2feb515c **(GET)**
