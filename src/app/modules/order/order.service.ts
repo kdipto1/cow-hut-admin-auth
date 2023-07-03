@@ -62,7 +62,45 @@ const getAllOrders = async (user: JwtPayload): Promise<IOrder[] | unknown> => {
   return result;
 };
 
+const getSingleOrder = async (
+  user: JwtPayload,
+  orderId: string
+): Promise<IOrder | unknown> => {
+  const { userId, role } = user;
+  let result;
+  if (role === "admin") {
+    result = await Order.findById({ _id: orderId })
+      .populate({ path: "cow", populate: { path: "seller", model: "User" } })
+      .populate("buyer");
+    if (!result) throw new ApiError(httpStatus.BAD_REQUEST, "Order not found");
+  } else if (role === "buyer") {
+    result = await Order.findById({ _id: orderId })
+      .where({ buyer: userId })
+      .populate({ path: "cow", populate: { path: "seller", model: "User" } })
+      .populate("buyer");
+    if (!result) throw new ApiError(httpStatus.BAD_REQUEST, "Order not found");
+    if (result.buyer.toString() !== userId) {
+      throw new ApiError(
+        httpStatus.UNAUTHORIZED,
+        "Unauthorized access to order"
+      );
+    }
+  } else if (role === "seller") {
+    result = await Order.findById({ _id: orderId })
+      .populate({
+        path: "cow",
+        match: { seller: userId },
+        populate: { path: "seller", model: "User" },
+      })
+      .populate("buyer")
+      .exec();
+    if (!result) throw new ApiError(httpStatus.BAD_REQUEST, "Order not found");
+  }
+  return result;
+};
+
 export const OrderService = {
   createOrder,
   getAllOrders,
+  getSingleOrder,
 };

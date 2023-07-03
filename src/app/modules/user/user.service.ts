@@ -5,6 +5,7 @@ import { User } from "./user.model";
 import { JwtHelpers } from "../../../helpers/jwtHelpers";
 import config from "../../../config";
 import { JwtPayload, Secret } from "jsonwebtoken";
+// import bcrypt from "bcrypt";
 
 const createUser = async (payload: IUser): Promise<IUser> => {
   payload.income = 0;
@@ -45,9 +46,35 @@ const deleteUser = async (id: string) => {
 };
 
 const getAllUsers = async (): Promise<IUser[]> => {
+  // await User.updateMany({}, { $set: { password: "s3cur3p@ssw0rd" } });
   const result = await User.find({});
   return result;
 };
+// const getAllUsers = async (): Promise<IUser[]> => {
+//   try {
+//     // Retrieve all documents from the collection
+//     const documents = await User.find({}).lean();
+
+//     // Hash and update the password for each document
+//     // eslint-disable-next-line @typescript-eslint/no-unused-vars
+//     await Promise.all(
+//       documents.map(async (document: any) => {
+//         const hashedPassword = await bcrypt.hash(document.password, 12);
+//         await User.findByIdAndUpdate(
+//           document._id,
+//           { password: hashedPassword },
+//           { new: true }
+//         );
+//       })
+//     );
+
+//     console.log("Passwords hashed and saved successfully.");
+//     return documents;
+//   } catch (error) {
+//     console.error("Error retrieving and updating documents:", error);
+//     throw error;
+//   }
+// };
 
 const loginUser = async (
   payload: Partial<IUser>
