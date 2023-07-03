@@ -79,12 +79,6 @@ const getSingleOrder = async (
       .populate({ path: "cow", populate: { path: "seller", model: "User" } })
       .populate("buyer");
     if (!result) throw new ApiError(httpStatus.BAD_REQUEST, "Order not found");
-    if (result.buyer.toString() !== userId) {
-      throw new ApiError(
-        httpStatus.UNAUTHORIZED,
-        "Unauthorized access to order"
-      );
-    }
   } else if (role === "seller") {
     result = await Order.findById({ _id: orderId })
       .populate({
@@ -95,6 +89,8 @@ const getSingleOrder = async (
       .populate("buyer")
       .exec();
     if (!result) throw new ApiError(httpStatus.BAD_REQUEST, "Order not found");
+    if (!result.cow)
+      throw new ApiError(httpStatus.BAD_REQUEST, "Order not found");
   }
   return result;
 };

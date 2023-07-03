@@ -29,6 +29,7 @@ const ApiError_1 = __importDefault(require("../../../errors/ApiError"));
 const user_model_1 = require("./user.model");
 const jwtHelpers_1 = require("../../../helpers/jwtHelpers");
 const config_1 = __importDefault(require("../../../config"));
+// import bcrypt from "bcrypt";
 const createUser = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     payload.income = 0;
     const result = yield user_model_1.User.create(payload);
@@ -64,9 +65,43 @@ const deleteUser = (id) => __awaiter(void 0, void 0, void 0, function* () {
     return result;
 });
 const getAllUsers = () => __awaiter(void 0, void 0, void 0, function* () {
+    // await User.updateMany({}, { $set: { password: "s3cur3p@ssw0rd" } });
     const result = yield user_model_1.User.find({});
     return result;
 });
+// const getAllUsers = async (): Promise<IUser[]> => {
+//   try {
+//     // Retrieve all documents from the collection
+//     const documents = await User.find({}).lean();
+//     // Hash and update the password for each document
+//     // eslint-disable-next-line @typescript-eslint/no-unused-vars
+//     // await Promise.all(
+//     //   documents.map(async (document: any) => {
+//     //     const hashedPassword = await bcrypt.hash(document.password, 12);
+//     //     await User.findByIdAndUpdate(
+//     //       document._id,
+//     //       { password: hashedPassword },
+//     //       { new: true }
+//     //     );
+//     //   })
+//     // );
+//     // const compare = await Promise.all(
+//     //   documents.map(async (document: any) => {
+//     //     const hashedPassword = await bcrypt.compare(
+//     //       "s3cur3p@ssw0rd",
+//     //       document.password
+//     //     );
+//     //     return hashedPassword;
+//     //   })
+//     // );
+//     console.log(compare);
+//     console.log("Passwords hashed and saved successfully.");
+//     return documents;
+//   } catch (error) {
+//     console.error("Error retrieving and updating documents:", error);
+//     throw error;
+//   }
+// };
 const loginUser = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     const { phoneNumber, password } = payload;
     if (!phoneNumber)

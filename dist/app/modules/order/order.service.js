@@ -71,7 +71,42 @@ const getAllOrders = (user) => __awaiter(void 0, void 0, void 0, function* () {
     }
     return result;
 });
+const getSingleOrder = (user, orderId) => __awaiter(void 0, void 0, void 0, function* () {
+    const { userId, role } = user;
+    let result;
+    if (role === "admin") {
+        result = yield order_model_1.Order.findById({ _id: orderId })
+            .populate({ path: "cow", populate: { path: "seller", model: "User" } })
+            .populate("buyer");
+        if (!result)
+            throw new ApiError_1.default(http_status_1.default.BAD_REQUEST, "Order not found");
+    }
+    else if (role === "buyer") {
+        result = yield order_model_1.Order.findById({ _id: orderId })
+            .where({ buyer: userId })
+            .populate({ path: "cow", populate: { path: "seller", model: "User" } })
+            .populate("buyer");
+        if (!result)
+            throw new ApiError_1.default(http_status_1.default.BAD_REQUEST, "Order not found");
+    }
+    else if (role === "seller") {
+        result = yield order_model_1.Order.findById({ _id: orderId })
+            .populate({
+            path: "cow",
+            match: { seller: userId },
+            populate: { path: "seller", model: "User" },
+        })
+            .populate("buyer")
+            .exec();
+        if (!result)
+            throw new ApiError_1.default(http_status_1.default.BAD_REQUEST, "Order not found");
+        if (!result.cow)
+            throw new ApiError_1.default(http_status_1.default.BAD_REQUEST, "Order not found");
+    }
+    return result;
+});
 exports.OrderService = {
     createOrder,
     getAllOrders,
+    getSingleOrder,
 };

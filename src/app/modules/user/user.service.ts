@@ -50,6 +50,7 @@ const getAllUsers = async (): Promise<IUser[]> => {
   const result = await User.find({});
   return result;
 };
+
 // const getAllUsers = async (): Promise<IUser[]> => {
 //   try {
 //     // Retrieve all documents from the collection
@@ -57,17 +58,27 @@ const getAllUsers = async (): Promise<IUser[]> => {
 
 //     // Hash and update the password for each document
 //     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-//     await Promise.all(
-//       documents.map(async (document: any) => {
-//         const hashedPassword = await bcrypt.hash(document.password, 12);
-//         await User.findByIdAndUpdate(
-//           document._id,
-//           { password: hashedPassword },
-//           { new: true }
-//         );
-//       })
-//     );
+//     // await Promise.all(
+//     //   documents.map(async (document: any) => {
+//     //     const hashedPassword = await bcrypt.hash(document.password, 12);
+//     //     await User.findByIdAndUpdate(
+//     //       document._id,
+//     //       { password: hashedPassword },
+//     //       { new: true }
+//     //     );
+//     //   })
+//     // );
+//     // const compare = await Promise.all(
+//     //   documents.map(async (document: any) => {
+//     //     const hashedPassword = await bcrypt.compare(
+//     //       "s3cur3p@ssw0rd",
+//     //       document.password
+//     //     );
+//     //     return hashedPassword;
+//     //   })
+//     // );
 
+//     console.log(compare);
 //     console.log("Passwords hashed and saved successfully.");
 //     return documents;
 //   } catch (error) {

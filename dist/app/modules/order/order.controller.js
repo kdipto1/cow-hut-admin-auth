@@ -45,7 +45,24 @@ const getAllOrders = (req, res, next) => __awaiter(void 0, void 0, void 0, funct
         next(error);
     }
 });
+const getSingleOrder = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const orderId = req.params.id;
+        const user = req.user;
+        const result = yield order_service_1.OrderService.getSingleOrder(user, orderId);
+        res.status(http_status_1.default.OK).json({
+            success: true,
+            statusCode: http_status_1.default.OK,
+            message: `Order information retrieved successfully`,
+            data: result,
+        });
+    }
+    catch (error) {
+        next(error);
+    }
+});
 exports.OrderController = {
     createOrder,
     getAllOrders,
+    getSingleOrder,
 };
